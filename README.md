@@ -107,7 +107,7 @@ The **📚 Library Management System** is a 🌐 web-based application designed 
 ---
 
 ## 🌟📷 Screenshots
-<img src="[/ddd-by-examples/library/raw/master/docs/images/eventstorming-big-picture.jpg](https://raw.githubusercontent.com/username/repo-name/branch-name/images/my-image.png](https://github.com/ronisarkar-official/Library-Management-System/blob/main/images/image_2024-12-17_220024561.png)" alt="Event Storming Big Picture" style="max-width: 100%;"> 
+<img src="images/image_2024-12-17_220024561.png" alt="Event Storming Big Picture" style="max-width: 100%;"> 
 
 ### 🏠 Home Page
  
