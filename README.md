@@ -107,7 +107,7 @@ The **📚 Library Management System** is a 🌐 web-based application designed 
 ---
 
 ## 🌟📷 Screenshots
-
+https://github.com/ronisarkar-official/Library-Management-System/blob/main/images/image_2024-12-17_220024561.png
 ### 🏠 Home Page
  
 ### 🖥 Admin Dashboard
