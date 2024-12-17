@@ -106,11 +106,13 @@ The **📚 Library Management System** is a 🌐 web-based application designed 
 
 ---
 
-## 🌟📷 Screenshots
-<img src="images/image_2024-12-17_220024561.png" alt="Event Storming Big Picture" style="max-width: 100%;"> 
+## 🌟📷 Screenshots 
 
 ### 🏠 Home Page
- 
+<img src="images/image_2024-12-17_220024561.png" 
+     alt="Event Storming Big Picture" 
+     style="max-width: 100%; border-radius: 10px;">
+
 ### 🖥 Admin Dashboard
 
 ---
