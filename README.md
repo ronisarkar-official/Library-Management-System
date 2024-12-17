@@ -114,7 +114,9 @@ The **📚 Library Management System** is a 🌐 web-based application designed 
      style="max-width: 100%; border-radius: 10px;">
 
 ### 🖥 Admin Dashboard
-
+<img src="images/image_2024-12-17_222322496.png" 
+     alt="Event Storming Big Picture" 
+     style="max-width: 100%; border-radius: 10px;">
 ---
 
 ## 👨‍💻🤝 Contributing
