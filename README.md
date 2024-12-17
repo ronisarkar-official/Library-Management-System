@@ -157,6 +157,6 @@ This project is licensed under the **⚖️ MIT License**. Feel free to use and 
 
 **Roni Sarkar**\
 📍 🌏 West Bengal, India\
-📧 Email: [your-email@example.com](mailto:your-email@example.com)\
-🌐 Website: [YourWebsite.com](https://yourwebsite.com)
+📧 Email: [dashingroni2004@gmail.com](mailto:dashingroni2004@gmail.com)\
+🌐 Website: [coming soon](https://yourwebsite.com)
 
