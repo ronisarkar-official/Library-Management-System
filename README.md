@@ -22,7 +22,7 @@ The **📚 Library Management System** is a 🌐 web-based application designed 
 
 - **🖼 Frontend**:
 
-  - 🌐 HTML5, 🎨 CSS3 (with ✨ Tailwind CSS for styling)
+  - 🌐 HTML5, 🎨 CSS3 
   - 🖱️ JavaScript
 
 - **🔒 Backend**:
