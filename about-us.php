@@ -11,6 +11,6 @@
     </style>
 </head>
 <body>
-    <?php include('layoutt.html');?>
+    <?php include('layoutt.php');?>
 </body>
 </html>

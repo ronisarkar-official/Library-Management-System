@@ -1,7 +1,11 @@
-<?php 
-$conn=mysqli_connect("localhost","u357634566_library","Ghost@8972134437","u357634566_college");
+<?php
+include('../connect.php');
+session_start();
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header("Location: ../default.php");
+    exit();
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

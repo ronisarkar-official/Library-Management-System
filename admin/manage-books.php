@@ -1,3 +1,11 @@
+<?php
+include('../connect.php');
+session_start();
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header("Location: ../default.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,7 +13,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+  
   <title>Books</title>
   <style>
     body {
@@ -60,14 +68,16 @@ color: #2563EB;
 
     .book-table {
       border-top-width: 1px; 
-border-color: #E5E7EB; 
-min-width: 100%; 
+      border-color: #E5E7EB; 
+      min-width: 100%;
+      border: none;
     }
 
     .book-table th, .book-table td {
       padding: 1rem;
       text-align: center;
       justify-content: space-between;
+      
     }
 
     .book-table th {
@@ -76,8 +86,6 @@ min-width: 100%;
       font-size: 0.875rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      
-      
     }
 
     .book-table tbody tr:nth-child(even) {
@@ -150,7 +158,7 @@ min-width: 100%;
           <!-- Table rows will be dynamically added here -->
           <?php
 // Database connection (update with your database details)
-$conn=mysqli_connect("localhost","root","","u357634566_college");
+include('../connect.php');
 
 // Check if the connection is successful
 if ($conn->connect_error) {

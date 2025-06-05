@@ -1,0 +1,8 @@
+php_value display_errors On
+php_value date.timezone Asia/Kolkata
+
+ErrorDocument 404 https://mcet.free.nf/404.php
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]

@@ -1,7 +1,9 @@
-<!-- PHP code for handling login form submission -->
-        <?php
-// Including the database connection again to ensure it's available
-include('server/connect.php');
+<?php
+// Starting the session
+session_start();
+
+// Including the database connection
+include('connect.php');
 
 // Checking if the login form was submitted
 if (isset($_POST['submit'])) {
@@ -20,21 +22,26 @@ if (isset($_POST['submit'])) {
         $row = $result->fetch_assoc(); // Fetch the row containing the user's info
 
         // Comparing the entered password with the stored password (should be hashed)
-        if ($pass === $row['password']) {
-            // If the password matches, redirect to the admin dashboard
+        if ($pass === $row['password']) { // **Note: Passwords should be hashed using `password_hash`**
+            // Set session variables for authentication
+            $_SESSION['loggedin'] = true;
+            $_SESSION['user_id'] = $row['id']; // Store user ID
+            $_SESSION['email'] = $row['email']; // Store user email
+
+            // Redirect to the admin dashboard
             header("Location: admin/dashboard.php");
             exit(); // Ensures the script stops after redirection
         } else {
             // Redirect to the home page with an alert if the password is incorrect
             echo "<script>
-                alert('Login failed. Invalid email or password!');
+                alert('Login failed. Apnar email r password vhul !');
                 window.location.href = 'default.php'; // Redirect to home page
                 </script>";
         }
     } else {
         // Redirect to the home page with an alert if the email is not found
         echo "<script>
-            alert('Login failed. Invalid email or password!');
+            alert('Login failed. Apnar email r password vhul !');
             window.location.href = 'default.php'; // Redirect to home page
             </script>";
     }
@@ -43,4 +50,5 @@ if (isset($_POST['submit'])) {
     $stmt->close();
     $conn->close();
 }
+// Logout functionality (can be placed in a logout.p
 ?>

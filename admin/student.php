@@ -1,178 +1,206 @@
-<?php 
-$conn=mysqli_connect("localhost","u357634566_library","Ghost@8972134437","u357634566_college");
+<?php
+include('../connect.php');
+session_start();
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header("Location: ../default.php");
+    exit();
+}
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fname'])) {
+    $name = $_POST['fname'];
+    $mail = $_POST['email'];
+    $phone = $_POST['phone'];
+    $class = $_POST['class'];
+    $id = $_POST['id'];
+
+    // Use prepared statements to avoid SQL injection
+    $stmt = $conn->prepare("INSERT INTO student (first_name, email, student_id, phone_number, class_roll) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssss", $name, $mail, $id, $phone, $class);
+
+    if ($stmt->execute()) {
+        echo "<script>alert('Registration successful!'); window.location.href = window.location.href;</script>";
+        exit;
+    } else {
+        echo "<script>alert('Registration failed. Please try again.');</script>";
+    }
+}
+
+
+
+// Pagination setup
+$recordsPerPage = 4;
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $recordsPerPage;
+
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Books</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f7f7f7;
-    }
-
-    .container {
-      
-    padding-left: 1rem; /* 16px */
-padding-right: 1rem;
-padding-top: 2rem; /* 32px */
-padding-bottom: 2rem;
-width: 100%;
-    }
-
-    .header-title {
-      margin-bottom: 2rem; 
-font-size: 2.5rem;
-line-height: 2.25rem; 
-font-weight: 700; 
-text-align: center; 
-color: #2563EB; 
-    }
-
-    .add-book-btn {
-      background-color: #2563eb;
-      color: white;
-      font-weight: bold;
-      padding: 0.5rem 1rem;
-      border-radius: 50px;
-      border: none;
-      cursor: pointer;
-      transition: transform 0.3s ease-in-out;
-    }
-
-    .add-book-btn:hover {
-      background-color: #284eff;
-      transform: scale(1.05);
-    }
-
-    .book-container {
-      overflow: hidden;
-      border-radius: 0.9rem;
-      background-color: #fefefe;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      margin-top: 1.5rem;
-      
-    }
-
-    .book-table {
-      border-top-width: 1px; 
-border-color: #E5E7EB; 
-min-width: 100%; 
-    }
-
-    .book-table th, .book-table td {
-      padding: 1rem;
-      text-align: center;
-      justify-content: space-between;
-    }
-
-    .book-table th {
-      background-color: #F5F5F5;
-      color: #404040;
-      font-size: 0.875rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      
-      
-    }
-
-    .book-table tbody tr:nth-child(even) {
-      background-color: #F9FAFB;
-    }
-
-    .book-table tbody td {
-      background-color: #fefefe;
-    }
-
-    .action-buttons {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .edit-btn {
-      color: #4F46E5;
-      background-color: transparent;
-      border: none;
-      cursor: pointer;
-    }
-
-    .edit-btn:hover {
-      color: #3730A3;
-    }
-
-    .delete-btn {
-      color: #E53E3E;
-      background-color: transparent;
-      border: none;
-      cursor: pointer;
-    }
-
-    .delete-btn:hover {
-      color: #C53030;
-    }
-
-    
-
-   .actives{
-    background: #e0e0e058;
-}
-   
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-  
-  <?php include('layout.php'); ?>
-    
-  <div class="container mx-auto px-4 py-8">
-    <h1 class="header-title">Registered Students List</h1>
+<?php include('layout.php'); ?>
+<body class="bg-gray-100 text-gray-800">
+
+  <div class="w-full px-4 py-8">
+    <h1 class="text-4xl leading-9 font-bold text-center text-blue-600 mb-8">Registered Students List</h1>
+
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+      <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition-transform transform hover:scale-105" id="openModalBtn" ...>Add New Student</button>
+
       
-    <div>
-      <button onclick="window.location.href='add-student.php'" class="add-book-btn">Add New Student</button>
+
+      <form method="GET" action="" class="ml-auto flex gap-2">
+        <input
+          name="search"
+          value="<?= htmlspecialchars($search) ?>"
+          class="px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          type="search"
+          placeholder="Search students..."
+        />
+        <input type="hidden" name="page" value="1" />
+        <button class="hidden" type="submit"></button>
+      </form>
     </div>
 
-    <div class="book-container">
-      <table class="book-table">
+    <div class="overflow-hidden rounded-xl bg-white shadow-md">
+      <table class="min-w-full border-t border-gray-200">
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Student Id</th>
-            <th>Phone</th>
-            <th>Class Roll</th>
+          <tr class="bg-gray-100 text-gray-700 text-sm uppercase tracking-wider">
+            <th class="py-4 px-4 text-center">Name</th>
+            <th class="py-4 px-4 text-center">Email</th>
+            <th class="py-4 px-4 text-center">Student Id</th>
+            <th class="py-4 px-4 text-center">Phone</th>
+            <th class="py-4 px-4 text-center">Class Roll</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Table rows will be dynamically added here -->
-           <?php
-// Query to fetch all students
-$sql = "SELECT first_name, email, student_id, phone_number, class_roll FROM student";
-$result = mysqli_query($conn, $sql);
+          <?php
+            if (!empty($search)) {
+                $searchParam = "%$search%";
+                $stmt = $conn->prepare("SELECT * FROM student WHERE 
+                    first_name LIKE ? OR 
+                    email LIKE ? OR 
+                    student_id LIKE ? OR 
+                    phone_number LIKE ? OR 
+                    class_roll LIKE ?
+                    LIMIT ?, ?");
+                $stmt->bind_param("sssssss", $searchParam, $searchParam, $searchParam, $searchParam, $searchParam, $offset, $recordsPerPage);
+            } else {
+                $stmt = $conn->prepare("SELECT * FROM student ORDER BY id DESC LIMIT ?, ?");
 
-if (mysqli_num_rows($result) > 0) {
-    // Output each row of data
-    while ($row = mysqli_fetch_assoc($result)) {
-        echo "<tr>
-                <td>" . htmlspecialchars($row['first_name']) . "</td>
-                <td>" . htmlspecialchars($row['email']) . "</td>
-                <td>" . htmlspecialchars($row['student_id']) . "</td>
-                <td>" . htmlspecialchars($row['phone_number']) . "</td>
-                <td>" . htmlspecialchars($row['class_roll']) . "</td>
-              </tr>";
-    }
-} else {
-    echo "<tr><td colspan='5'>No students found.</td></tr>";
-}
-?>
+                $stmt->bind_param("ii", $offset, $recordsPerPage);
+            }
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr class='even:bg-gray-50'>
+                            <td class='py-3 px-4 text-center bg-white'>" . htmlspecialchars($row['first_name']) . "</td>
+                            <td class='py-3 px-4 text-center bg-white'>" . htmlspecialchars($row['email']) . "</td>
+                            <td class='py-3 px-4 text-center bg-white'>" . htmlspecialchars($row['student_id']) . "</td>
+                            <td class='py-3 px-4 text-center bg-white'>" . htmlspecialchars($row['phone_number']) . "</td>
+                            <td class='py-3 px-4 text-center bg-white'>" . htmlspecialchars($row['class_roll']) . "</td>
+                          </tr>";
+                }
+            } else {
+                echo "<tr><td colspan='5' class='py-4 px-4 text-center text-red-500'>No students found.</td></tr>";
+            }
+          ?>
         </tbody>
       </table>
     </div>
+
+<!-- Modal Background -->
+<div id="studentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+  <!-- Modal Content -->
+  <div class="bg-white rounded-lg shadow-lg p-8 max-w-lg w-full relative">
+    <button id="closeModalBtn" class="absolute top-3 right-3 text-gray-600 hover:text-gray-900 text-2xl font-bold">&times;</button>
+    <h2 class="text-2xl mb-6 font-semibold text-indigo-600">Student Registration</h2>
+
+    <form id="studentForm" method="POST" class="space-y-4">
+      <input type="text" name="fname" placeholder="Full Name" required
+        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-indigo-500" />
+      <input type="email" name="email" placeholder="Email" required
+        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-indigo-500" />
+      <input type="text" name="phone" placeholder="Phone No" required
+        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-indigo-500" />
+      <input type="text" name="class" placeholder="Class Roll" required
+        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-indigo-500" />
+      <input type="text" name="id" placeholder="Student ID" required
+        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-indigo-500" />
+
+      <button type="submit"
+        class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition">Register</button>
+    </form>
+  </div>
+</div>
+
+    <!-- Pagination -->
+    <div class="mt-6 flex justify-center items-center gap-2">
+      <?php
+        // Count total records
+      if (!empty($search)) {
+    $searchParam = "%$search%";
+    $stmt = $conn->prepare("SELECT COUNT(*) AS total FROM student WHERE 
+        first_name LIKE ? OR 
+        email LIKE ? OR 
+        student_id LIKE ? OR 
+        phone_number LIKE ? OR 
+        class_roll LIKE ?");
+    $stmt->bind_param("sssss", $searchParam, $searchParam, $searchParam, $searchParam, $searchParam);
+} else {
+    $stmt = $conn->prepare("SELECT COUNT(*) AS total FROM student");
+}
+$stmt->execute();
+$countResult = $stmt->get_result();
+$totalRecords = $countResult->fetch_assoc()['total'];
+$totalPages = ceil($totalRecords / $recordsPerPage);
+
+        // Render buttons
+        if ($totalPages > 1) {
+            if ($page > 1) {
+                echo '<a href="?search=' . urlencode($search) . '&page=' . ($page - 1) . '" class="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300">Previous</a>';
+            }
+
+            for ($i = 1; $i <= $totalPages; $i++) {
+                $active = $i == $page ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300';
+                echo '<a href="?search=' . urlencode($search) . '&page=' . $i . '" class="px-3 py-2 rounded ' . $active . '">' . $i . '</a>';
+            }
+
+            if ($page < $totalPages) {
+                echo '<a href="?search=' . urlencode($search) . '&page=' . ($page + 1) . '" class="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300">Next</a>';
+            }
+        }
+      ?>
+    </div>
   </div>
 </body>
+<script>
+  const openBtn = document.getElementById('openModalBtn');
+  const closeBtn = document.getElementById('closeModalBtn');
+  const modal = document.getElementById('studentModal');
+
+  openBtn.addEventListener('click', () => {
+    modal.classList.remove('hidden');
+  });
+
+  closeBtn.addEventListener('click', () => {
+    modal.classList.add('hidden');
+  });
+
+  // Optional: close modal on click outside the modal content
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.add('hidden');
+    }
+  });
+</script>
+
 </html>
