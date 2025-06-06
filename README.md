@@ -35,37 +35,7 @@ The **📚 Library Management System** is a 🌐 web-based application designed 
 
 ---
 
-## 💂‍♂️📂 Project Structure
 
-```
-├── 🗂️ admin/                # Admin functionalities 
-│   ├── ➕ add-books.php       # Add 📚 books functionality
-│   ├── ➕ add-student.php     # Add 🙋 student functionality
-│   ├── 🖥 dashboard.php       # Admin dashboard
-│   ├── ❌ delete-book.php     # Delete 📚 book functionality
-│   ├── 📥 issue-book.php      # Issue 📚 books functionality
-│   ├── 🖼 layout.php          # Layout structure
-│   ├── 🔒 logout.php          # Logout functionality
-│   ├── 📚 manage-books.php    # Manage 📚 books functionality
-│   ├── 📑 manage-issue-books.php # Manage issued 📚 books functionality
-│   ├── 🧑‍🎓 student.php         # Manage 🙋 students functionality
-│   └── 🎨 style.css           # Admin-specific styling
-├── 🖼 images/               # 📷 Images used in the application
-│   ├── 🌅 BGIS.png            # 🌌 Background image for the interface
-│   ├── ℹ️ about.png           # ℹ️ About page image
-│   └── 📞 contact.png         # 📞 Contact page image
-├── 🗂️ server/               # Server-side configurations
-│   └── 🔗 connect.php         # Database connection file
-├── ℹ️ about-us.php          # ℹ️ About Us page
-├── 📞 contact.php           # 📞 Contact page
-├── 🖥 default.php           # Default template file
-├── 🖼 layout.html           # HTML layout structure
-├── 🔒 login.php             # 🙋 User/🔧 Admin login
-├── 🖱️ script.js             # 🖱️ JavaScript logic
-├── 🎨 style.css             # 🎨 CSS for styling
-```
-
----
 
 ## 🚀✨ Installation
 
